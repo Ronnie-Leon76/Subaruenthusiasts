@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g@l-03c@!q$!cl7^(6+hb+y#fd(j^ojyf2toc*6-nln#4@6@cy'
-
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG',cast=bool)
 
-ALLOWED_HOSTS = ['subaruenthusiasts.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['subaruboyzclub.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,30 +89,27 @@ WSGI_APPLICATION = 'my_django_app.wsgi.application'
 #         'PORT' : '5432',
 #     }
 # }
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
-    dsn="https://examplePublicKey@o0.ingest.sentry.io/0",
+    dsn="https://616836a3d4a54408bbc2500334d88af7@o501817.ingest.sentry.io/5583456",
     integrations=[DjangoIntegration()],
-
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production,
     traces_sample_rate=1.0,
 
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
-import os
-import psycopg2
+#import os
+#import psycopg2
 
-DATABASE_URL = os.environ['DATABASE_URL']
+#DATABASE_URL = os.environ['DATABASE_URL']
 
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-import dj_database_url
-DATABASES['default'] = dj_database_url.config(conn_max_age =600, ssl_require=True)
+#conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+#import dj_database_url
+DATABASES={'default':dj_database_url.config(conn_max_age =600, ssl_require=True)} 
 
 
 # Password validation
